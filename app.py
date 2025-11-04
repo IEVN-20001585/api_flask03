@@ -1,10 +1,52 @@
 from flask import Flask,render_template, request
+import forms
+
 
 app =Flask(__name__)
 
 @app.route('/')
 def home():
     return "Hello, Word!"
+
+
+@app.route("/figuras", methods=['GET', 'POST'])
+def figuras():
+    form = forms.FigurasForm(request.form)
+    area = ""
+    figura = ""
+    
+    if request.method == 'POST' and form.validate():
+        figura = request.form.get('figura')
+        f1 = form.valor1.data
+        f2 = form.valor2.data
+
+        if figura == 'circulo':
+            area = 3.1416 * (f1 * f1)
+        elif figura == 'triangulo':
+            area = (f1 * f2) / 2
+        elif figura == 'rectangulo':
+            area = f1 *f2
+        elif figura == 'cuadrado':
+            area = f1 * f1
+
+    return render_template('figuras.html', form=form, area=area, figura=figura)
+
+@app.route("/Alumnos", methods=['GET','POST']) 
+def alumnos():
+    mat=0
+    nom=""
+    ape=""
+    em=""
+    alumnos_clase=forms.UserForm(request.form)
+    if request.method=='POST':
+        mat=alumnos_clase.matricula.data
+        nom=alumnos_clase.nombre.data
+        ape=alumnos_clase.apellido.data
+        em=alumnos_clase.correo.data
+    return render_template('alumnos.html', form=alumnos_clase, mat=mat, nom=nom,ape=ape, em=em)
+
+    
+    
 
 @app.route('/index')
 def index():
@@ -25,6 +67,7 @@ def operas():
 @app.route('/distancia')
 def distancia():
     return render_template('distancia.html')
+
 
 @app.route('/layout')
 def layout():

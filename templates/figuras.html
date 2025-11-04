@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% from "_macros.html" import render_field %}
+
+{% block content %}
+<div class="container mt-4">
+     
+    <form method="POST">
+       <h4>Selecciona una figura y calcula su area</h4>
+    
+        <label><input type="radio" name="figura" value="circulo"> Circulo</label><br>
+        <label><input type="radio" name="figura" value="triangulo"> Triangulo</label><br>
+        <label><input type="radio" name="figura" value="rectangulo"> Rectangulo</label><br>
+        <label><input type="radio" name="figura" value="cuadrado"> Cuadrado</label><br><br>
+
+        {{ render_field(form.valor1) }}
+        {{ render_field(form.valor2) }}
+
+        <button type="submit" class="btn btn-primary">Calcular</button>
+    </form>
+   
+    <div style="background-color: rgb(130, 113, 223); padding: 15px; margin-top: 20px;">
+        <h3>Resultado:</h3>
+        <p>El area del {{ figura }} es: {{ area }}</p>
+    </div>
+</div>
+{% endblock %}
