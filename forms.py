@@ -1,5 +1,6 @@
 from wtforms import Form, FloatField, StringField,  EmailField, PasswordField, IntegerField
 from wtforms import validators
+import forms as formularios
 
 class UserForm(Form):
     matricula=IntegerField('Matricula',
@@ -22,3 +23,11 @@ class FigurasForm(Form):
         'Segundo numero',
         [validators.Optional()]
     )
+class PizzaForm(Form):
+    nombre = StringField('Nombre', [validators.DataRequired(message="El nombre es obligatorio")])
+    direccion = StringField('Direccion', [validators.DataRequired(message="La dirección es obligatoria")])
+    telefono = StringField('Telefono', [validators.DataRequired(message="El teléfono es obligatorio")])
+    cantidad = IntegerField('Cantidad', [
+        validators.NumberRange(min=1, message="Debe ser al menos 1"),
+        validators.DataRequired(message="La cantidad es obligatoria")
+    ])

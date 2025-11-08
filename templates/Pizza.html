@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+{% import "_macros.html" as macro %}
+
+{% block content %}
+
+<style>
+    body {
+        background-color: #79bfe7;
+        font-family: Arial, sans-serif;
+    }
+    fieldset {
+        background-color: #bdbaba;
+        border: 1px solid #666;
+        border-radius: 4px;
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+    legend {
+        font-weight: bold;
+        font-size: 1em;
+        padding: 0 5px;
+    }
+    table {
+        width: 100%;
+        background-color: #a9a9a9;
+        border-collapse: collapse;
+        color: black;
+    }
+    table th, table td {
+        border: 1px solid #666;
+        text-align: center;
+        padding: 4px;
+    }
+    .btn-ver {
+        background-color: #d3d3d3;
+        border: 1px solid #999;
+        font-weight: bold;
+        width: 100%;
+        padding: 5px;
+    }
+</style>
+
+
+<form action="" method="post">
+    <fieldset>
+        <div class="row">
+            <div class="col-md-4">{{ macro.campoNuevo(form.nombre) }}</div>
+            <div class="col-md-4">{{ macro.campoNuevo(form.direccion) }}</div>
+            <div class="col-md-4">{{ macro.campoNuevo(form.telefono) }}</div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="row">
+            <div class="col-md-4">
+                <fieldset>
+                    <legend>Tamaño Pizza</legend>
+                    <label><input type="radio" name="tamano" value="chica" checked> Chica $40</label><br>
+                    <label><input type="radio" name="tamano" value="mediana"> Mediana $80</label><br>
+                    <label><input type="radio" name="tamano" value="grande"> Grande $120</label>
+                </fieldset>
+            </div>
+
+            <div class="col-md-4">
+                <fieldset>
+                    <legend>Ingredientes</legend>
+                    <label><input type="checkbox" name="ingrediente" value="Jamon"> Jamón $10</label><br>
+                    <label><input type="checkbox" name="ingrediente" value="Piña"> Piña $10</label><br>
+                    <label><input type="checkbox" name="ingrediente" value="Champiñones"> Champiñones $10</label>
+                </fieldset>
+            </div>
+
+            <div class="col-md-4">
+                {{ macro.campoNuevo(form.cantidad) }}
+                <button type="submit" name="accion" value="agregar" class="btn btn-primary btn-block">Agregar</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<div style="display:flex; gap:15px;">
+   
+    <form method="post" style="flex:2;">
+        <fieldset>
+            <legend>Detalle del pedido</legend>
+            <table>
+                <tr>
+                    <th>Tamaño</th>
+                    <th>Ingredientes</th>
+                    <th>Num. Pizzas</th>
+                    <th>SubTotal</th>
+                </tr>
+                {% if pizzas %}
+                    {% for p in pizzas %}
+                    <tr>
+                        <td>{{ p.tamano }}</td>
+                        <td>{{ p.ingredientes }}</td>
+                        <td>{{ p.cantidad }}</td>
+                        <td>${{ p.subtotal }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="4" style="text-align:center;">No hay pizzas en el pedido</td></tr>
+                {% endif %}
+            </table>
+
+            <br>
+            <div style="display:flex; gap:10px;">
+                <button type="submit" name="accion" value="quitar" class="btn btn-danger">Quitar</button>
+                <button type="submit" name="accion" value="terminar" class="btn btn-success">Terminar</button>
+            </div>
+        </fieldset>
+    </form>
+
+    <form method="post" style="flex:1;">
+        {% if mostrar_ventas %}
+        <fieldset>
+            <legend>Venta del día</legend>
+            <div style="background:#bdbaba; border:1px solid #555; padding:10px;">
+                {% if ventas %}
+                    <table style="width:100%; border-collapse:collapse; font-weight:bold; font-size:17px;">
+                        <tbody>
+                            {% for v in ventas %}
+                            <tr>
+                                <td style="text-align:left; padding:4px 8px;">{{ v.nombre }}</td>
+                                <td style="text-align:center;">total</td>
+                                <td style="text-align:right;">${{ v.total }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <hr style="border:1px solid #666;">
+                    <div style="font-weight:bold; font-size:18px; text-align:center;">
+                        Ventas totales del día:&nbsp; ${{ total_dia }}
+                    </div>
+                {% else %}
+                    <p style="font-weight:bold;">No hay ventas registradas.</p>
+                {% endif %}
+            </div>
+        </fieldset>
+        {% endif %}
+
+        <div style="margin-top:10px;">
+            <button type="submit" name="accion" value="ver_ventas" class="btn-ver">
+                Ventas totales por día
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
